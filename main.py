@@ -27,22 +27,36 @@ num_to_month = {
     11: "Nov",
     12: "Dec"
 } 
+def inputpathreader(path = None): 
+    if path == None:
+        path = input("Enter path to videos: ")
+    if not os.path.exists(path):
+        print("Path does not exist")
+        return None
+    website, hashtag, confirmed = path[2:].split("/")
+    if confirmed != "Confirmed":
+        print("Path does not end with confirmed")
+        return None
+    return path, website, hashtag
+
 
 # USER VARIABLES FILL THESE OUT (fill out username and password in config.py)
 IG_USERNAME = config.IG_USERNAME
 IG_PASSWORD = config.IG_PASSWORD
 print(IG_USERNAME)
 print(IG_PASSWORD)
-title = "TRY NOT TO LAUGH (BEST Dank video memes) V1"
+inputpath, website, hashtag = inputpathreader(config.INPUTPATH)
+title = f"{config.HOOK} | {hashtag} {website} Compilation EP {config.NUM}"
+
 now = datetime.datetime.now()
 videoDirectory = "./DankMemes_" + num_to_month[now.month].upper() + "_" + str(now.year) + "_V" + str(now.day) + "/"
 outputFile = "./" + num_to_month[now.month].upper() + "_" + str(now.year) + "_v" + str(now.day) + ".mp4"
 
-INTRO_VID = '' # SET AS '' IF YOU DONT HAVE ONE
-OUTRO_VID = ''
-TOTAL_VID_LENGTH = 13*60
-MAX_CLIP_LENGTH = 19
-MIN_CLIP_LENGTH = 5
+INTRO_VID = config.INTROPATH
+OUTRO_VID = config.OUTPUTPATH
+TOTAL_VID_LENGTH = config.VIDEO_LENGTH
+MAX_CLIP_LENGTH = config.MAX_CLIP_LENGTH
+MIN_CLIP_LENGTH = config.MIN_CLIP_LENGTH
 DAILY_SCHEDULED_TIME = "20:00"
 TOKEN_NAME = "token.json" # Don't change
 
@@ -146,4 +160,6 @@ attemptRoutine()
 while True:
     schedule.run_pending()  
     time.sleep(60) # wait one min
+
+
 

@@ -1,3 +1,4 @@
+from turtle import title
 from moviepy.editor import VideoFileClip, concatenate_videoclips
 from moviepy.video.fx.resize import resize
 import os
@@ -5,6 +6,8 @@ from os.path import isfile, join
 import random
 import shutil 
 from collections import defaultdict
+import config
+import psutil
 
 VideoFileClip.resize = resize
 
@@ -31,11 +34,11 @@ def generateTimeRange(duration, clipDuration):
     return "@" + preTime
     
 # makeCompilation takes videos in a folder and creates a compilation with max length totalVidLength
-def makeCompilation(path = "./",
+def makeCompilation(path = "",
                     introName = '',
                     outroName = '',
-                    totalVidLength = 10*60,
-                    maxClipLength = 20,
+                    totalVidLength = 14*60,
+                    maxClipLength = 60,
                     minClipLength = 5,
                     outputFile = "output.mp4"):
 
@@ -47,8 +50,8 @@ def makeCompilation(path = "./",
         filePath = join(path, fileName);
         if isfile(filePath) and fileName.endswith(".mp4"):
             print(fileName)
-            if os.stat(filePath).st_size < 5000:
-                continue
+            if psutil.virtual_memory()[2] > 95:
+                break
 
             # Destination path  
             clip = VideoFileClip(filePath)
@@ -60,6 +63,7 @@ def makeCompilation(path = "./",
                 allVideos.append(clip)
                 seenLengths[duration].append(fileName)
                 totalLength += duration
+                print(totalLength)
     
     print("Total Length: " + str(totalLength))
 
@@ -90,21 +94,49 @@ def makeCompilation(path = "./",
     if outroName != '':
         outroVid = VideoFileClip("./" + outroName)
         videos.append(outroVid)
+        duration += outroVid.duration
 
     finalClip = concatenate_videoclips(videos, method="compose")
 
-    audio_path = "/tmp/temoaudiofile.m4a"
+    tmp_audio_path = "./tmp/tempaudiofile.m4a"
 
     #print(description)
     # Create compilation
-    finalClip.write_videofile(outputFile, threads=8, temp_audiofile=audio_path, remove_temp=True, codec="libx264", audio_codec="aac")
+    print(outputpath)
+    finalClip.write_videofile(outputpath, threads=8, temp_audiofile=tmp_audio_path, remove_temp=True, codec="libx264", audio_codec="aac")
 
     return description
-    
-if __name__ == "__main__":
-    makeCompilation(path = "/Users/nathanan/Documents/YOUTUBE/AutomatedChannel/Videos/Memes/",
-                    introName = "intro_vid.mp4",
-                    outroName = '',
-                    totalVidLength = 10*60,
-                    maxClipLength = 20,
-                    outputFile = "outputseq.mp4")
+
+
+# Takes a path like this: ./TikTok/RedPill/Confirmed and seperates out TikTok, RedPill, and Confirmed into their own variables
+def inputpathreader(path = None): 
+    if path == None:
+        path = input("Enter path to videos: ")
+    if not os.path.exists(path):
+        print("Path does not exist")
+        return None
+    website, hashtag, confirmed = path[2:].split("/")
+    if confirmed != "Confirmed":
+        print("Path does not end with confirmed")
+        return None
+    return path, website, hashtag
+
+
+
+# if __name__ == "__main__":
+outputpath = "Videos/temp.mp4"
+inputpath, website, hashtag = inputpathreader(config.INPUTPATH) #os.path.normpath("./TikTok/Red Pill/Confirmed")) # C:\Users\maste\OneDrive\Desktop\AutomatedVideos\automated_youtube_channel
+title = f"{config.HOOK} | {hashtag} {website} Compilation EP {config.NUM}"
+
+
+
+makeCompilation(path = inputpath, 
+                introName = config.INTROPATH,
+                outroName = config.OUTROPATH,
+                totalVidLength = config.VIDEOMINUTES*60,
+                maxClipLength = 70,
+                minClipLength = 5,
+                outputFile = outputpath)
+
+print(f"\n{title} | Finished")
+# print(f"\n{description}")
