@@ -8,6 +8,7 @@ import shutil
 from collections import defaultdict
 import config
 import psutil
+from playsound import playsound
 
 VideoFileClip.resize = resize
 
@@ -50,7 +51,8 @@ def makeCompilation(path = "",
         filePath = join(path, fileName);
         if isfile(filePath) and fileName.endswith(".mp4"):
             print(fileName)
-            if psutil.virtual_memory()[2] > 95:
+            if psutil.virtual_memory()[2] > 99:
+                print(f"\n!\n!\nNot enough memory to continue: {psutil.virtual_memory()[2]}%\n!\n!")
                 break
 
             # Destination path  
@@ -102,13 +104,15 @@ def makeCompilation(path = "",
 
     #print(description)
     # Create compilation
-    print(outputpath)
-    finalClip.write_videofile(outputpath, threads=8, temp_audiofile=tmp_audio_path, remove_temp=True, codec="libx264", audio_codec="aac")
+    print(outputFile)
+    finalClip.write_videofile(outputFile, temp_audiofile=tmp_audio_path, remove_temp=True, 
+    codec="mpeg4", audio_codec="aac", audio_bitrate="192k", 
+    preset="ultrafast", threads=8, verbose = True, logger=None)
 
     return description
 
 
-# Takes a path like this: ./TikTok/RedPill/Confirmed and seperates out TikTok, RedPill, and Confirmed into their own variables
+# Takes a path like this: ./website/genre/Confirmed and seperates out TikTok, Funny, and Confirmed into their own variables
 def inputpathreader(path = None): 
     if path == None:
         path = input("Enter path to videos: ")
@@ -124,7 +128,6 @@ def inputpathreader(path = None):
 
 
 # if __name__ == "__main__":
-outputpath = "Videos/temp.mp4"
 inputpath, website, hashtag = inputpathreader(config.INPUTPATH) #os.path.normpath("./TikTok/Red Pill/Confirmed")) # C:\Users\maste\OneDrive\Desktop\AutomatedVideos\automated_youtube_channel
 title = f"{config.HOOK} | {hashtag} {website} Compilation EP {config.NUM}"
 
@@ -133,10 +136,12 @@ title = f"{config.HOOK} | {hashtag} {website} Compilation EP {config.NUM}"
 makeCompilation(path = inputpath, 
                 introName = config.INTROPATH,
                 outroName = config.OUTROPATH,
-                totalVidLength = config.VIDEOMINUTES*60,
-                maxClipLength = 70,
-                minClipLength = 5,
-                outputFile = outputpath)
+                totalVidLength = config.VIDEO_LENGTH,
+                maxClipLength = config.MAX_CLIP_LENGTH,
+                minClipLength = config.MIN_CLIP_LENGTH,
+                outputFile = config.OUTPUTPATH)
 
 print(f"\n{title} | Finished")
+print(f"\nPlaying alarm sound")
+playsound('Alert.m4a')
 # print(f"\n{description}")

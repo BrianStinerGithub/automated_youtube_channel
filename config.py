@@ -1,15 +1,14 @@
 # Grab s_v_web_id from browser info, write a neat hook, provide the hashtag, and which episode this is.
 TIKTOKCOOKIE = "verify_kzhqf4ou_TjooWp6F_asqz_4rs2_BL4s_yp6ToSyntXZh"
-HOOK = "just breathe and focus on you for a while"
+HOOK = "you are going to do great things "
 
 HASHTAG = "Calming"
-VIDEOMINUTES = "14"
-NUM = "1" 
+NUM = "6" 
 #IWMMGG:1 #ALSOC:1 
 
-VIDEO_LENGTH = 13*60
-MAX_CLIP_LENGTH = 70
-MIN_CLIP_LENGTH = 5
+VIDEO_LENGTH = 16*60
+MAX_CLIP_LENGTH = 100
+MIN_CLIP_LENGTH = 10
 
 OUTPUTPATH = "Videos/Video.mp4"
 INPUTPATH = f"./TikTok/{HASHTAG}/Confirmed"
