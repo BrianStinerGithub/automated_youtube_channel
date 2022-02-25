@@ -3,12 +3,10 @@ from moviepy.editor import VideoFileClip, concatenate_videoclips
 from moviepy.video.fx.resize import resize
 import os
 from os.path import isfile, join
-import random
-import shutil 
+from random import shuffle
 from collections import defaultdict
 import config
 import psutil
-from playsound import playsound
 
 VideoFileClip.resize = resize
 
@@ -35,13 +33,13 @@ def generateTimeRange(duration, clipDuration):
     return "@" + preTime
     
 # makeCompilation takes videos in a folder and creates a compilation with max length totalVidLength
-def makeCompilation(path = "",
-                    introName = '',
-                    outroName = '',
-                    totalVidLength = 14*60,
-                    maxClipLength = 60,
-                    minClipLength = 5,
-                    outputFile = "output.mp4"):
+def makeCompilation(path = config.INPUTPATH, 
+                introName = config.INTROPATH,
+                outroName = config.OUTROPATH,
+                totalVidLength = config.VIDEO_LENGTH,
+                maxClipLength = config.MAX_CLIP_LENGTH,
+                minClipLength = config.MIN_CLIP_LENGTH,
+                outputFile = config.OUTPUTPATH):
 
     allVideos = []
     seenLengths = defaultdict(list)
@@ -69,7 +67,7 @@ def makeCompilation(path = "",
     
     print("Total Length: " + str(totalLength))
 
-    random.shuffle(allVideos)
+    shuffle(allVideos)
 
     duration = 0
     # Add intro vid
@@ -126,22 +124,14 @@ def inputpathreader(path = None):
     return path, website, hashtag
 
 
+if __name__ == "__main__":
+    inputpath, website, hashtag = inputpathreader(config.INPUTPATH) #os.path.normpath("./TikTok/Red Pill/Confirmed")) # C:\Users\maste\OneDrive\Desktop\AutomatedVideos\automated_youtube_channel
+    title = f"{config.HOOK} | {hashtag} {website} Compilation EP {config.NUM}"
+    print("Making Compilation...")
+    makeCompilation()
+    print(f"\n{title} | Finished")
 
-# if __name__ == "__main__":
-inputpath, website, hashtag = inputpathreader(config.INPUTPATH) #os.path.normpath("./TikTok/Red Pill/Confirmed")) # C:\Users\maste\OneDrive\Desktop\AutomatedVideos\automated_youtube_channel
-title = f"{config.HOOK} | {hashtag} {website} Compilation EP {config.NUM}"
 
-
-
-makeCompilation(path = inputpath, 
-                introName = config.INTROPATH,
-                outroName = config.OUTROPATH,
-                totalVidLength = config.VIDEO_LENGTH,
-                maxClipLength = config.MAX_CLIP_LENGTH,
-                minClipLength = config.MIN_CLIP_LENGTH,
-                outputFile = config.OUTPUTPATH)
-
-print(f"\n{title} | Finished")
-print(f"\nPlaying alarm sound")
-playsound('Alert.m4a')
+# print(f"\nPlaying alarm sound")
+# playsound('Alert.m4a')
 # print(f"\n{description}")

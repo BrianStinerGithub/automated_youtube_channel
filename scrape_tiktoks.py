@@ -5,25 +5,29 @@ import random
 import config
 import urllib
 
+def scrape_tiktoks():
+    verifyFp = config.TIKTOKCOOKIE 
+    did = ''.join(random.choice(string.digits) for _ in range(19))
+    api = TikTokApi.get_instance(custom_verifyFP=verifyFp, custom_device_id=did)
+
+    hashtag = config.HASHTAG
+    tiktoks = api.by_hashtag(hashtag, 100)
+
+    for tiktok in tiktoks:
+        downloadaddress = tiktok['video']['downloadAddr']
+        title = f"{tiktok['author']['nickname']}{tiktok['desc'][:10]}".translate(str.maketrans('', '', string.punctuation))
+        download(downloadaddress, f"./TikTok/{hashtag}/{title}.mp4")
+
+
 def download(url, file_name):
     with open(file_name, 'wb') as f:
         response = urllib.request.urlopen(url)
         f.write(response.read())
 
-verifyFp = config.TIKTOKCOOKIE 
-did = ''.join(random.choice(string.digits) for _ in range(19))
-api = TikTokApi.get_instance(custom_verifyFP=verifyFp, custom_device_id=did)
-
-hashtag = "Relaxing" #config.HASHTAG
-website = "TikTok" #config.WEBSITE
-tiktoks = api.by_hashtag(hashtag, 500) # trending(count = 10, custom_verifyFp="")
-
-hashtag = "Calming"
-
-for tiktok in tiktoks:
-    downloadaddress = tiktok['video']['downloadAddr']
-    title = f"{tiktok['author']['nickname']}{tiktok['desc'][:10]}".translate(str.maketrans('', '', string.punctuation))
-    download(downloadaddress, f"./{website}/{hashtag}/{title}.mp4")
+if "__main__" == __name__:
+    print("Scraping Videos...")
+    scrape_tiktoks()
+    print("Scraped Videos!")
 
 
 

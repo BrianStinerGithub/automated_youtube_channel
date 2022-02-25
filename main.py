@@ -1,4 +1,4 @@
-from scrape_videos import scrapeVideos
+from scrape_tiktoks import scrape_tiktoks
 from make_compilation import makeCompilation
 from upload_ytvid import uploadYtvid
 import schedule
@@ -14,19 +14,13 @@ from google.oauth2.credentials import Credentials
 import config
 
 num_to_month = {
-    1: "Jan",
-    2: "Feb",
-    3: "Mar",
-    4: "Apr",
-    5: "May",
-    6: "June",
-    7: "July",
-    8: "Aug",
-    9: "Sept",
-    10: "Oct",
-    11: "Nov",
-    12: "Dec"
-} 
+    1: "Jan",  2: "Feb",  3: "Mar",
+    4: "Apr",  5: "May",  6: "June",
+    7: "July", 8: "Aug",  9: "Sept",
+    10: "Oct", 11: "Nov", 12: "Dec"
+}
+
+# Utilizes the organization of he file structure to communcate with the video scraper 
 def inputpathreader(path = None): 
     if path == None:
         path = input("Enter path to videos: ")
@@ -40,16 +34,12 @@ def inputpathreader(path = None):
     return path, website, hashtag
 
 
-# USER VARIABLES FILL THESE OUT (fill out username and password in config.py)
-IG_USERNAME = config.IG_USERNAME
-IG_PASSWORD = config.IG_PASSWORD
-print(IG_USERNAME)
-print(IG_PASSWORD)
+# Reads information from config.py. Go there to make a video.
 inputpath, website, hashtag = inputpathreader(config.INPUTPATH)
 title = f"{config.HOOK} | {hashtag} {website} Compilation EP {config.NUM}"
 
 now = datetime.datetime.now()
-videoDirectory = "./DankMemes_" + num_to_month[now.month].upper() + "_" + str(now.year) + "_V" + str(now.day) + "/"
+videoDirectory = f"./{hashtag}_" + num_to_month[now.month].upper() + "_" + str(now.year) + "_V" + str(now.day) + "/"
 outputFile = "./" + num_to_month[now.month].upper() + "_" + str(now.year) + "_v" + str(now.day) + ".mp4"
 
 INTRO_VID = config.INTROPATH
@@ -100,29 +90,10 @@ def routine():
         os.makedirs(videoDirectory)
     
     # Step 1: Scrape Videos
-    print("Scraping Videos...")
-    scrapeVideos(username = IG_USERNAME,
-                 password = IG_PASSWORD,
-                 output_folder = videoDirectory,
-                  days=1)
-    print("Scraped Videos!")
-    
-    description = "Enjoy the memes! :) \n\n" \
-    "like and subscribe to @Chewy for more \n\n" \
+    scrape_tiktoks()
 
     # Step 2: Make Compilation
-    print("Making Compilation...")
-    makeCompilation(path = videoDirectory,
-                    introName = INTRO_VID,
-                    outroName = OUTRO_VID,
-                    totalVidLength = TOTAL_VID_LENGTH,
-                    maxClipLength = MAX_CLIP_LENGTH,
-                    minClipLength = MIN_CLIP_LENGTH,
-                    outputFile = outputFile)
-    print("Made Compilation!")
-    
-    description += "\n\nCopyright Disclaimer, Under Section 107 of the Copyright Act 1976, allowance is made for 'fair use' for purposes such as criticism, comment, news reporting, teaching, scholarship, and research. Fair use is a use permitted by copyright statute that might otherwise be infringing. Non-profit, educational or personal use tips the balance in favor of fair use.\n\n"
-    description += "#memes #dankmemes #compilation #funny #funnyvideos \n\n"
+    makeCompilation()
 
     # Step 3: Upload to Youtube
     print("Uploading to Youtube...")
@@ -142,7 +113,7 @@ def routine():
         os.remove(outputFile)
     except OSError as e:  ## if failed, report it back to the user ##
         print ("Error: %s - %s." % (e.filename, e.strerror))
-    print("Removed temp files!")
+    print("Removed temp files!")\
 
 def attemptRoutine():
     while(1):
@@ -153,9 +124,8 @@ def attemptRoutine():
             print("Routine Failed on " + "OS error: {0}".format(err))
             time.sleep(60*60)
 
-#attemptRoutine()
-schedule.every().day.at(DAILY_SCHEDULED_TIME).do(attemptRoutine)
 
+schedule.every().day.at(DAILY_SCHEDULED_TIME).do(attemptRoutine)
 attemptRoutine()
 while True:
     schedule.run_pending()  
