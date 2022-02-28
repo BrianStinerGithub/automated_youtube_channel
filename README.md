@@ -1,11 +1,12 @@
 # Fully Automated Youtube Channel
 
-Code to run a fully automated youtube that can scrape content, edit a compilation, and upload to youtube daily. \
-Read about it here: https://medium.com/@nathan_149/making-a-fully-automated-youtube-channel-20f2fa57e469
+Code to run a fully automated youtube that can scrape content from TikTok, make a thumbnail, descriptions, complilation video with intro/outro/VFX/SFX, and upload to youtube daily.
+
+Read about it here: https://medium.com
 
 # Instructions
 
-1. [Download](https://github.com/nathan-149/automated_youtube_channel/archive/refs/heads/master.zip) the Github Repository
+1. Download the Github Repository
 
 2. Download and install [Python3](https://www.python.org/downloads/) and [pip](https://pip.pypa.io/en/stable/installing/) if necessary.
 
