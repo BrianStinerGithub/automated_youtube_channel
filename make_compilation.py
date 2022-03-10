@@ -1,5 +1,5 @@
-from turtle import title
-from moviepy.editor import VideoFileClip, concatenate_videoclips
+from turtle import back, title
+from moviepy.editor import ImageClip, VideoFileClip, CompositeVideoClip, concatenate_videoclips
 from moviepy.video.fx.resize import resize
 import os
 from os.path import isfile, join
@@ -10,11 +10,13 @@ import psutil
 import create_thumbnail as ct
 import tqdm
 from PIL import Image
+import string
 
 VideoFileClip.resize = resize
 
 def extractAcc(filepath):
-        return filepath.split("\\")[-1].split(".")[0]
+        name = filepath.split("\\")[-1].split("_")[0]
+        return ''.join((filter(lambda x: x in string.printable, name)))
 
 # generateTimeRange converts float seconds to a range of form @MM:SS
 def generateTimeRange(duration):
@@ -69,40 +71,38 @@ def writeCompilation(allVideos,
     videos = []
     description = ""
     TM = ct.ThumbnailMaker()
+    background = ImageClip("./Thumbnail/Template.png")
 
     # Add intro video
     if introName != '':
         introVid = VideoFileClip("./" + introName)
-        videos.append(introVid)
-        duration += introVid.duration
+        allVideos.prepend(introVid)
+
+    # Add outro vid
+    if outroName != '':
+        outroVid = VideoFileClip("./" + outroName)
+        allVideos.append(outroVid)
     
     # Add clips, descriptions, and thumbnails
     for clip in allVideos:
         description += generateTimeRange(duration) + " - " + extractAcc(clip.filename) + "\n"
         duration += clip.duration 
-        videos.append(clip)
-        TM.compare_topn(Image.fromarray(clip.get_frame(0)))
-        TM.compare_topn(Image.fromarray(clip.get_frame(clip.duration-1)))
-    
-    # Add outro vid
-    if outroName != '':
-        outroVid = VideoFileClip("./" + outroName)
-        videos.append(outroVid)
-        duration += outroVid.duration
-
-    finalClip = concatenate_videoclips(videos, method="compose")
-    tmp_audio_path = "./tmp/tempaudiofile.m4a"
+        cclip = CompositeVideoClip([background.set_duration(clip.duration), clip.set_position((background.w/2 - clip.w/2, 0))])
+        videos.append(cclip)
+        TM.compare_topn(clip)
 
     # Create compilation
-    print(outputFile)
-    finalClip.write_videofile(outputFile, temp_audiofile=tmp_audio_path, remove_temp=True, 
-    codec="mpeg4", audio_codec="aac", audio_bitrate="192k", 
-    preset="ultrafast", threads=8, verbose = True, logger=None)
+    finalClip = concatenate_videoclips(videos, method="compose")
+    tmp_audio_path = "./tmp/tempaudiofile.m4a"
+    finalClip.set_memoize(True)
+    finalClip.write_videofile("output.avi", temp_audiofile=tmp_audio_path, remove_temp=True, 
+     codec="png", audio_codec="aac", audio_bitrate="192k", 
+     preset="ultrafast", threads=8, verbose = True, logger=None)
 
-    # Create thumbnail
-    TM.make_thumbnail()
+    # Create thumbnail 
+    TM.make_thumbnail().save("./tmp/thumbnail.png")
 
-    # Create description
+    # Create description 
     with open("./tmp/description.txt", "w") as f:
         f.write(description)
 
