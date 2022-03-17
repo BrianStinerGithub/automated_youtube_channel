@@ -2,21 +2,19 @@ from time import sleep
 from TikTokApi import TikTokApi
 import string
 import random
-import config
+from config import *
 import urllib
 
 def scrape_tiktoks():
-    verifyFp = config.TIKTOKCOOKIE 
     did = ''.join(random.choice(string.digits) for _ in range(19))
-    api = TikTokApi.get_instance(custom_verifyFP=verifyFp, custom_device_id=did)
+    api = TikTokApi.get_instance(proxy="213.137.240.243:81", custom_verifyFP=TIKTOKCOOKIE, custom_device_id=did)
 
-    hashtag = config.HASHTAG
-    tiktoks = api.by_hashtag(hashtag, 100)
+    tiktoks = api.by_hashtag(HASHTAG, 100)
 
     for tiktok in tiktoks:
         downloadaddress = tiktok['video']['downloadAddr']
-        title = f"{tiktok['author']['nickname']}{tiktok['desc'][:10]}".translate(str.maketrans('', '', string.punctuation))
-        download(downloadaddress, f"./TikTok/{hashtag}/{title}.mp4")
+        title = f"{tiktok['author']['nickname']}{tiktok['desc'][:15]}".translate(str.maketrans('', '', string.punctuation))
+        download(downloadaddress, f"./TikTok/{HASHTAG}/{title}.mp4")
 
 
 def download(url, file_name):

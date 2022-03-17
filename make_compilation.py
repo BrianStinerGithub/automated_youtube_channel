@@ -71,7 +71,7 @@ def writeCompilation(allVideos,
     videos = []
     description = ""
     TM = ct.ThumbnailMaker()
-    background = ImageClip("./Thumbnail/Template.png")
+    background = ImageClip("./assets/Template.png")
 
     # Add intro video
     if introName != '':
@@ -100,7 +100,7 @@ def writeCompilation(allVideos,
      preset="ultrafast", threads=8, verbose = True, logger=None)
 
     # Create thumbnail 
-    TM.make_thumbnail().save("./tmp/thumbnail.png")
+    TM.make_thumbnail().save(config.THUMBNAILPATH)
 
     # Create description 
     with open("./tmp/description.txt", "w") as f:

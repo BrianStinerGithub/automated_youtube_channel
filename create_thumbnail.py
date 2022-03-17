@@ -39,22 +39,23 @@ class ThumbnailMaker:
         score = preds.detach().numpy().item()
         return score
 
-    def make_thumbnail(self, color=(255,255,255)):
+    def make_thumbnail(self):
         self.topnimages.sort(key=lambda x: self.predict(x), reverse=True)
 
         extras = []
         for filename in os.listdir("./assets"):
             if filename.endswith(".png"):
-                extras.append(Image.open("./assets/" + filename))
+                extras.append(Image.open("./assets/stickers/" + filename))
 
         im1, im2, im3 = self.topnimages[:3]
-        dst = Image.new('RGB', (im1.width + im2.width + im3.width, max(im1.height, im2.height, im3.height)), color)
+        dst = Image.new('RGB', (im1.width + im2.width + im3.width, max(im1.height, im2.height, im3.height)), (255, 255, 255))
         dst.paste(im1, (0, 0))
         dst.paste(im2, (im1.width, 0))
         dst.paste(im3, (im1.width + im2.width, 0))
 
         for img in extras:
-            dst.paste(img, (r.randrange(img.width, dst.width-img.width), r.randrange(img.height, dst.height-img.height)))
+            w, h = int(img.width/2), int(img.height/2)
+            dst.paste(img, (r.randrange(w, dst.width-w), r.randrange(h, dst.height-h)))
         
         return dst
 

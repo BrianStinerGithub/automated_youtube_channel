@@ -1,16 +1,12 @@
 from scrape_tiktoks import scrape_tiktoks
 from make_compilation import makeCompilation
-from upload_ytvid import uploadYtvid
+from upload_video import upload_video
+from cleanup import cleanup
 import schedule
 import time
 import datetime
 import os
-import shutil
-import googleapiclient.errors
-from googleapiclient.discovery import build #pip install google-api-python-client
-from google_auth_oauthlib.flow import InstalledAppFlow #pip install google-auth-oauthlib
-from google.auth.transport.requests import Request
-from google.oauth2.credentials import Credentials
+from googleapiclient.discovery import build
 import config
 
 num_to_month = {
@@ -48,72 +44,16 @@ TOTAL_VID_LENGTH = config.VIDEO_LENGTH
 MAX_CLIP_LENGTH = config.MAX_CLIP_LENGTH
 MIN_CLIP_LENGTH = config.MIN_CLIP_LENGTH
 DAILY_SCHEDULED_TIME = "20:00"
-TOKEN_NAME = "token.json" # Don't change
-
-# Setup Google 
-SCOPES = ["https://www.googleapis.com/auth/youtube.upload"]
-os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
-client_secrets_file = "googleAPI.json"
 
 def routine():
-
-    # Handle GoogleAPI oauthStuff
-    print("Handling GoogleAPI")
-    creds = None
-    # The file token1.json stores the user's access and refresh tokens, and is
-    # created automatically when the authorization flow completes for the first
-    # time.
-    if os.path.exists(TOKEN_NAME):
-        creds = Credentials.from_authorized_user_file(TOKEN_NAME, SCOPES)
-    # If there are no (valid) credentials available, let the user log in.
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file(
-                client_secrets_file, SCOPES)
-            creds = flow.run_console()
-        # Save the credentials for the next run
-        with open(TOKEN_NAME, 'w') as token:
-            token.write(creds.to_json())
-
-    googleAPI = build('youtube', 'v3', credentials=creds)
-
-    now = datetime.datetime.now()
-    print(now.year, now.month, now.day, now.hour, now.minute, now.second)
-    
-    #metadataFile = "./metadata-" + num_to_month[now.month].upper() + "_" + str(now.year) + "_v" + str(now.day) + ".txt"
-    description = ""
-    print(outputFile)
-
-    if not os.path.exists(videoDirectory):
-        os.makedirs(videoDirectory)
-    
     # Step 1: Scrape Videos
     scrape_tiktoks()
-
     # Step 2: Make Compilation
     makeCompilation()
-
     # Step 3: Upload to Youtube
-    print("Uploading to Youtube...")
-    uploadYtvid(VIDEO_FILE_NAME=outputFile,
-                title=title,
-                description=description,
-                googleAPI=googleAPI)
-    print("Uploaded To Youtube!")
-    
+    upload_video()
     # Step 4: Cleanup
-    print("Removing temp files!")
-    # Delete all files made:
-    #   Folder videoDirectory
-    shutil.rmtree(videoDirectory, ignore_errors=True)
-    #   File outputFile
-    try:
-        os.remove(outputFile)
-    except OSError as e:  ## if failed, report it back to the user ##
-        print ("Error: %s - %s." % (e.filename, e.strerror))
-    print("Removed temp files!")\
+    cleanup()
 
 def attemptRoutine():
     while(1):
@@ -121,15 +61,16 @@ def attemptRoutine():
             routine()
             break
         except OSError as err:
-            print("Routine Failed on " + "OS error: {0}".format(err))
-            time.sleep(60*60)
+            now = datetime.datetime.now()
+            print(f"Routine Failed on {now.hour}:{now.minute}:{now.second} OS error: {0}".format(err))
+            time.sleep(60)
 
 
 schedule.every().day.at(DAILY_SCHEDULED_TIME).do(attemptRoutine)
 attemptRoutine()
 while True:
     schedule.run_pending()  
-    time.sleep(60) # wait one min
+    time.sleep(60)
 
 
 
