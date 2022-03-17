@@ -17,18 +17,19 @@ def upload_video(
     keywords = KEYWORDS,
     category = CATEGORY,
     privacyStatus = PRIVACYSTATUS,
+    video_path = OUTPUTPATH,
     ):
 
-    channel = Channel(account)
-    channel.login("./assets/client_secret.json", "./assets/credentials.storage")
+    channel = Channel()
+    channel.login("./assets/secrets.json", "./assets/credentials.storage")
 
     # setting up the video that is going to be uploaded
-    video = LocalVideo(file_path=OUTPUTPATH)
+    video = LocalVideo(file_path=video_path)
 
     # setting snippet
     video.set_title(title)
     video.set_description(description)
-    video.set_tags(keywords)
+    video.set_tags(list(keywords))
     video.set_category(category)
     video.set_default_language("en-US")
 
@@ -39,7 +40,7 @@ def upload_video(
     video.set_public_stats_viewable(True)
 
     # setting thumbnail
-    video.set_thumbnail_path(THUMBNAILPATH)
+    video.set_thumbnail_path(THUMBNAILPATH.replace(" ",""))
 
     # uploading video and printing the results
     video = channel.upload_video(video)
@@ -51,8 +52,7 @@ def upload_video(
     
     # commenting on video
 
-
 if __name__ == "__main__":
     print("Uploading video...")
-    upload_video()
+    upload_video(video_path="test.mp4")
     print("Video was uploaded!")

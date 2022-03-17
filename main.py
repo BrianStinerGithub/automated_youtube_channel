@@ -15,27 +15,8 @@ num_to_month = {
     7: "July", 8: "Aug",  9: "Sept",
     10: "Oct", 11: "Nov", 12: "Dec"
 }
-
-# Utilizes the organization of he file structure to communcate with the video scraper 
-def inputpathreader(path = None): 
-    if path == None:
-        path = input("Enter path to videos: ")
-    if not os.path.exists(path):
-        print("Path does not exist")
-        return None
-    website, hashtag, confirmed = path[2:].split("/")
-    if confirmed != "Confirmed":
-        print("Path does not end with confirmed")
-        return None
-    return path, website, hashtag
-
-
-# Reads information from config.py. Go there to make a video.
-inputpath, website, hashtag = inputpathreader(config.INPUTPATH)
-title = f"{config.HOOK} | {hashtag} {website} Compilation EP {config.NUM}"
-
 now = datetime.datetime.now()
-videoDirectory = f"./{hashtag}_" + num_to_month[now.month].upper() + "_" + str(now.year) + "_V" + str(now.day) + "/"
+videoDirectory = f"./{config.HASHTAG}_" + num_to_month[now.month].upper() + "_" + str(now.year) + "_V" + str(now.day) + "/"
 outputFile = "./" + num_to_month[now.month].upper() + "_" + str(now.year) + "_v" + str(now.day) + ".mp4"
 
 INTRO_VID = config.INTROPATH
@@ -45,7 +26,15 @@ MAX_CLIP_LENGTH = config.MAX_CLIP_LENGTH
 MIN_CLIP_LENGTH = config.MIN_CLIP_LENGTH
 DAILY_SCHEDULED_TIME = "20:00"
 
+def setup():
+    if not os.path.exists(videoDirectory):  os.makedirs(videoDirectory)
+    if not os.path.exists(OUTRO_VID):       os.makedirs(OUTRO_VID)
+    now = datetime.datetime.now()
+    print(f"{now.month}/{now.day}/{now.year} {now.hour}:{now.minute}:{now.second}")
+
 def routine():
+    # Step 0: Setup
+    setup()
     # Step 1: Scrape Videos
     scrape_tiktoks()
     # Step 2: Make Compilation

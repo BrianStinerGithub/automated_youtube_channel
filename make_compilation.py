@@ -97,34 +97,17 @@ def writeCompilation(allVideos,
     finalClip.set_memoize(True)
     finalClip.write_videofile("output.avi", temp_audiofile=tmp_audio_path, remove_temp=True, 
      codec="png", audio_codec="aac", audio_bitrate="192k", 
-     preset="ultrafast", threads=8, verbose = True, logger=None)
+     preset="ultrafast", threads=8, verbose=True, logger=None)
 
     # Create thumbnail 
-    TM.make_thumbnail().save(config.THUMBNAILPATH)
+    TM.make_thumbnail().save(config.THUMBNAILPATH.replace(" ", "").replace("\\","/"))
 
     # Create description 
     with open("./tmp/description.txt", "w") as f:
         f.write(description)
 
 
-
-# Takes a path like this: ./website/genre/Confirmed and seperates out TikTok, Funny, and Confirmed into their own variables
-def inputpathreader(path = None): 
-    if path == None:
-        path = input("Enter path to videos: ")
-    if not os.path.exists(path):
-        print("Path does not exist")
-        return None
-    website, hashtag, confirmed = path[2:].split("/")
-    if confirmed != "Confirmed":
-        print("Path does not end with confirmed")
-        return None
-    return path, website, hashtag
-
-
 if __name__ == "__main__":
-    inputpath, website, hashtag = inputpathreader(config.INPUTPATH) #os.path.normpath("./TikTok/Red Pill/Confirmed")) # C:\Users\maste\OneDrive\Desktop\AutomatedVideos\automated_youtube_channel
-    title = f"{config.HOOK} | {hashtag} {website} Compilation EP {config.NUM}"
     print("Making Compilation...")
     makeCompilation()
     print(f"\n{title} | Finished")

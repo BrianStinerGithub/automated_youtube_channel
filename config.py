@@ -27,7 +27,7 @@ CHANNELNAME = "UnconventionalWisdom"
 TITLE = "I made an automatic video, this is the result"
 DESCRIPTION = "I made the video with python using the TikTok API, the YouTube API, MoviePy, CV2, and Google API. I hope you enjoy it!"
 KEYWORDS = "supercool", "cool", "tiktok", "tiktoktiktok", "tiktoktiktoktiktok"
-CATEGORY = "22"
+CATEGORY = 22
 PRIVACYSTATUS = "public"
 
 
