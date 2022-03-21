@@ -2,8 +2,6 @@
 
 Code to run a fully automated youtube that can run in the cloud to scrape content from TikTok, make a thumbnail, description, and complilation video with intro/outro/VFX/SFX then upload to youtube daily.
 
-Read about it here: https://medium.com
-
 # Instructions
 
 1. Download the Github Repository
