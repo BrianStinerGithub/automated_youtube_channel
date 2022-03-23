@@ -40,7 +40,7 @@ def upload_video(
     video.set_public_stats_viewable(True)
 
     # setting thumbnail
-    video.set_thumbnail_path(THUMBNAILPATH.replace(" ",""))
+    video.set_thumbnail_path("./assets/Template.png")            #(THUMBNAILPATH.replace(" ",""))
 
     # uploading video and printing the results
     video = channel.upload_video(video)
