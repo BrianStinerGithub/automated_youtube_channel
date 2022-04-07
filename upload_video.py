@@ -38,6 +38,7 @@ def upload_video(
     video.set_license("creativeCommon")
     video.set_privacy_status(privacyStatus)
     video.set_public_stats_viewable(True)
+    video.set_made_for_kids(False)
 
     # setting thumbnail
     video.set_thumbnail_path("./assets/Template.png")            #(THUMBNAILPATH.replace(" ",""))
@@ -54,5 +55,5 @@ def upload_video(
 
 if __name__ == "__main__":
     print("Uploading video...")
-    upload_video(video_path="test.mp4")
+    upload_video()
     print("Video was uploaded!")

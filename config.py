@@ -15,7 +15,7 @@ MAX_CLIP_LENGTH = 100
 MIN_CLIP_LENGTH = 5
 
 # Paths
-OUTPUTPATH = f"Videos/{HASHTAG}{NUM}.mp4"
+OUTPUTPATH = "./Videos/output.avi"    #f"Videos/{HASHTAG}{NUM}.mp4"
 INPUTPATH =  f"TikTok/{HASHTAG}/Confirmed"
 INTROPATH = ""  #"Intro/Intro.mp4"
 OUTROPATH = ""  #"Outro/Outro.mp4"
