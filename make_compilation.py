@@ -74,13 +74,13 @@ def writeCompilation(allVideos,
     background = ImageClip("./assets/Template.png")
 
     # Add intro video
-    if introName != '':
-        introVid = VideoFileClip("./" + introName)
-        allVideos.prepend(introVid)
+    if  != '':
+        intro = VideoFileClip(f"{config.INTROPATH}/Intro.mp4")
+        allVideos.prepend(intro)
 
     # Add outro vid
     if outroName != '':
-        outroVid = VideoFileClip("./" + outroName)
+        outroVid = VideoFileClip(f"{config.OUTROPATH}/Outro.mp4")
         allVideos.append(outroVid)
     
     # Add clips, descriptions, and thumbnails
@@ -95,12 +95,12 @@ def writeCompilation(allVideos,
     finalClip = concatenate_videoclips(videos, method="compose")
     tmp_audio_path = "./tmp/tempaudiofile.m4a"
     finalClip.set_memoize(True)
-    finalClip.write_videofile("output.avi", temp_audiofile=tmp_audio_path, remove_temp=True, 
+    finalClip.write_videofile(f"{config.OUTPUTPATH}/output.avi", temp_audiofile=tmp_audio_path, remove_temp=True, 
      codec="png", audio_codec="aac", audio_bitrate="192k", 
      preset="ultrafast", threads=8, verbose=True, logger=None)
 
     # Create thumbnail 
-    TM.make_thumbnail().save(config.THUMBNAILPATH.replace(" ", "").replace("\\","/"))
+    TM.make_thumbnail().save(f"{config.THUMBNAILPATH}/output.png")
 
     # Create description 
     with open("./tmp/description.txt", "w") as f:
