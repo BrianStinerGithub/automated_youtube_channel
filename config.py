@@ -1,25 +1,31 @@
 
-# Grab s_v_web_id from browser info
-TIKTOKCOOKIE = "verify_9cd3ed1f0c495e641d3eafbe4384085f"
-
-# Write sentence to catch the emotions of your viewers
-HOOK = "lift heavy stuff and don't cry about it"
-
-#Red Pill:1 #Calming:6 
-HASHTAG = "Red Pill"
-NUM = "6" 
+TIKTOKCOOKIE = "verify_9cd3ed1f0c495e641d3eafbe4384085f"    # Grab the s_v_web_id cookie from browser and paste here
+HASHTAG = "[Fuzzy Hats]"                                    # Hashtag for your channel 
 
 # 15 min temp limit. TikTok lengths are between min-max seconds.
 VIDEO_LENGTH = 14*60
 MAX_CLIP_LENGTH = 100
 MIN_CLIP_LENGTH = 5
+# Dates and times
+import datetime
+now = datetime.datetime.now()
+NOW = now
+MONTH = {
+    1: "January",   2: "Febuary",   3: "March",
+    4: "April",     5: "May",       6: "June",
+    7: "July",      8: "August",    9: "September",
+    10: "October",  11: "November", 12: "December"
+}[NOW.month]
 
 # Paths
-OUTPUTPATH = "./Videos/output.avi"    #f"Videos/{HASHTAG}{NUM}.mp4"
-INPUTPATH =  f"TikTok/{HASHTAG}/Confirmed"
-INTROPATH = ""  #"Intro/Intro.mp4"
-OUTROPATH = ""  #"Outro/Outro.mp4"
-THUMBNAILPATH = f"Thumbnails/{HASHTAG}{NUM}.jpg"
+OUTPUTPATH =    f"./assets/videos/Created/{HASHTAG}:{MONTH}_{NOW.day}_{NOW.year}/"
+TIKTOKPATH =    f"./assets/videos/TikTok/{HASHTAG}"
+INTROPATH =     f"./assets/videos/Intro/"
+OUTROPATH =     f"./assets/videos/Outro/"
+THUMBNAILPATH = f"./assets/thumbnails/"
+PATHS = {
+    OUTPUTPATH 
+}
 
 # Youtube information
 ACCOUNTNAME = "Masterdiasastermail@gmail.com"
