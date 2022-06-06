@@ -1,6 +1,4 @@
 from turtle import width
-from cv2 import imshow
-from numpy import number
 import torch
 import torchvision.models
 import torchvision.transforms as transforms
@@ -11,7 +9,7 @@ import random as r
 
 class ThumbnailMaker:
     def __init__(self):
-        self.topnimages = []
+        self.topnImages = []
         self.model = self.prepare_model()
     
     def prepare_image(self, image):
@@ -27,7 +25,7 @@ class ThumbnailMaker:
 
     def prepare_model(self):
         model = torchvision.models.resnet50()
-        model.avgpool = torch.nn.AdaptiveAvgPool2d(1) # for any size of the input
+        model.avgpool = torch.nn.AdaptiveAvgPool2d(1)
         model.fc = torch.nn.Linear(in_features=2048, out_features=1)
         model.load_state_dict(torch.load('model/model-resnet50.pth', map_location=torch.device('cpu'))) 
         return model.eval()
@@ -40,14 +38,14 @@ class ThumbnailMaker:
         return score
 
     def make_thumbnail(self):
-        self.topnimages.sort(key=lambda x: self.predict(x), reverse=True)
+        self.topnImages.sort(key=lambda x: self.predict(x), reverse=True)
 
         extras = []
         for filename in os.listdir("./assets"):
             if filename.endswith(".png"):
                 extras.append(Image.open("./assets/stickers/" + filename))
 
-        im1, im2, im3 = self.topnimages[:3]
+        im1, im2, im3 = self.topnImages[:3]
         dst = Image.new('RGB', (im1.width + im2.width + im3.width, max(im1.height, im2.height, im3.height)), (255, 255, 255))
         dst.paste(im1, (0, 0))
         dst.paste(im2, (im1.width, 0))
@@ -64,4 +62,4 @@ class ThumbnailMaker:
         for i in range(int(clip.duration)):
             clipframes.append(Image.fromarray(clip.get_frame(i)))
         clipframes.sort(key=lambda x: self.predict(x), reverse=True)
-        self.topnimages.append(clipframes[0])
+        self.topnImages.append(clipframes[0])

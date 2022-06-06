@@ -27,11 +27,13 @@ MONTH = {
 }[NOW.month]
 
 # Paths
-OUTPUTPATH =    f"./assets/videos/Created/{HASHTAG}:{MONTH}_{NOW.day}_{NOW.year}"
-TIKTOKPATH =    f"./assets/videos/TikTok/{HASHTAG}:{MONTH}_{NOW.day}_{NOW.year}"
-INTROPATH =     f"./assets/videos/Intro/"
-OUTROPATH =     f"./assets/videos/Outro/"
-THUMBNAILPATH = f"./assets/thumbnails/{HASHTAG}:{MONTH}_{NOW.day}_{NOW.year}"
+timecodeFolder =f"{HASHTAG}-{MONTH}_{NOW.day}_{NOW.year}"
+OUTPUTPATH =    f"./assets/videos/Created/{timecodeFolder}"
+TIKTOKPATH =    f"./assets/videos/TikTok/{timecodeFolder}"
+INTROPATH =     f"./assets/videos/Intro"
+OUTROPATH =     f"./assets/videos/Outro"
+THUMBNAILPATH = f"./assets/thumbnails/{timecodeFolder}"
+BACKGROUNDPATH =f"./assets/thumbnails"
 PATHS = {
     OUTPUTPATH, TIKTOKPATH, INTROPATH, OUTROPATH, THUMBNAILPATH
 }

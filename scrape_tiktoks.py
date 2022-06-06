@@ -1,21 +1,20 @@
+from config import *
 from time import sleep
 from TikTokApi import TikTokApi
+import logging
 import string
 import random
-from config import *
 import urllib
 
 def scrape_tiktoks():
-    did = ''.join(random.choice(string.digits) for _ in range(19))
-    api = TikTokApi.get_instance(proxy="213.137.240.243:81", custom_verifyFP=TIKTOKCOOKIE, custom_device_id=did)
-
-    tiktoks = api.by_hashtag(HASHTAG, 100)
-
-    for tiktok in tiktoks:
-        downloadaddress = tiktok['video']['downloadAddr']
-        title = f"{tiktok['author']['nickname']}{tiktok['desc'][:15]}".translate(str.maketrans('', '', string.punctuation))
-        download(downloadaddress, f"./TikTok/{HASHTAG}/{title}.mp4")
-
+    rid = ''.join(random.choice(string.digits) for _ in range(19))                                                                                          # Make a random 19 digit number for API
+    api = TikTokApi.get_instance(proxy="213.137.240.243:81", custom_verifyFP=TIKTOKCOOKIE, custom_device_id=rid)                                            # Get TikTok API a proxy, cookie, and id
+    tiktoks = api.by_hashtag(HASHTAG, 100)                                                                                                                  # Get 100 TikToks by searching with hashtag
+    minute, second, microsecond = str(NOW.minute), str(NOW.second), str(NOW.microsecond)                                                                    # Get time
+    for tiktok in tiktoks:                                                                                                                                  #
+        downloadURL = tiktok['video']['downloadAddr']                                                                                                       # Download the TikToks to folder each
+        title = f"{tiktok['author']['nickname']}{tiktok['desc'][:15]} {minute}:{second}:{microsecond}".translate(str.maketrans('', '', string.punctuation)) # TikTok has a title with the TikToker's name,
+        download(downloadURL, f"{TIKTOKPATH}/{title}.mp4")                                                                                        # description, time. Minus any punctuation.
 
 def download(url, file_name):
     with open(file_name, 'wb') as f:
@@ -23,16 +22,6 @@ def download(url, file_name):
         f.write(response.read())
 
 if "__main__" == __name__:
-    print("Scraping Videos...")
+    logging.info("Scraping Videos...")
     scrape_tiktoks()
-    print("Scraped Videos!")
-
-
-
-# for username in usernames:
-#     tiktok = api.by_username(username, count=5)
-#     download(tiktok['video']['downloadAddr'], f"./tiktoks/{hashtag}/{tiktok['author']['nickname']}{tiktok['desc'][:5]}.mp4")
-#     sleep(5)
-
-# mgtow = ["theKnowledgebros", "dr.dating", "the_real_advice","6footJay", "koldheartkamm", "moderndaiting", "saifiev", "motivationroom1", "qkoutes", "missiontomanhood", "garyvee", "stevenpapi_", "bgreat_quotes", "switchup18", "s7gray26", "lijah2x0", "blizzymanizzy", ".boysfeeltoo", "chakmah.deon", "prettyboyturbo_", "drunkie_6.7", "stateattire", "billionaireoption", "nathan.thomison", "5amdreamer", "geebmouth", "joshayy_14k", "blackvagabond1", "bulldogmindset", "ashtonisalpha", "thegrizzcaveofficial", "factsforrealationships", "godcoltonn", "toktate", "riseup.alex", "kamiosurgio", "fs.ryanwalker", "menshealthcoach", "the_redpill_experiment", "officialgic0e", "redpilllife", "stacks1400", "Joshsogravyy", "performance_potential", "thedreamarchitect", "theprincechuk", "johnnyoldenjr", "kamiosurgio", "amshighlights", "defundsimping", "cam.khs"]
-# usernames = mgtow
+    logging.info("Scraped Videos!")

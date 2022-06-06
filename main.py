@@ -17,8 +17,8 @@ OUTRO_VID = f"{config.OUTPUTPATH}"
 
 def setup():
     for path in config.PATHS:
-        if not os.path.exists(path): os.makedirs(path)                  # If path don't exist, make it
-    logging.info(f"Setup run at [{hour}:{minute}:{second} {month}/{day}/{year}]")
+        if not os.path.exists(path): os.makedirs(path)                              # If path don't exist, make it
+    logging.info(f"Setup run at [{hour}:{minute}:{second} {month}/{day}/{year}]")   #     
 
 def routine():
     setup()             # Step 0: Setup
@@ -29,8 +29,8 @@ def routine():
 
 def attemptRoutine():
     while True:
-        try:                                # When routine runs we stop
-            routine()                       # If it fails, we try again in a minute
+        try:            # When routine runs we stop trying to run it
+            routine()   # If it fails, we try again in a minute
             break
         except OSError as err:           
             logging.error(f"Routine Failed on {hour}:{minute}:{second} OS error: {0}".format(err))
