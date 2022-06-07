@@ -1,4 +1,3 @@
-from turtle import width
 import torch
 import torchvision.models
 import torchvision.transforms as transforms

@@ -15,7 +15,8 @@ PRIVACYSTATUS = "public"
 VIDEO_LENGTH = 14*60
 MAX_CLIP_LENGTH = 100
 MIN_CLIP_LENGTH = 5
-# Dates and times
+
+# Date and time used in folder names
 import datetime
 now = datetime.datetime.now()
 NOW = now

@@ -4,6 +4,7 @@ import os
 
 def cleanup():
     rmtree(OUTPUTPATH, ignore_errors=True)
+
     try:
         os.remove(OUTPUTPATH)
     except OSError as e:  ## if failed, report it back to the user ##
