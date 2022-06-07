@@ -6,6 +6,7 @@ import os
 import psutil
 import create_thumbnail as ct
 import string
+from random import shuffle
 
 def extractAcc(filepath):
         name = filepath.split("\\")[-1].split("_")[0]
@@ -56,7 +57,7 @@ def makeCompilation(inputpath = TIKTOKPATH,                                     
                 break
             logging.info(f"{fileName} added")
     
-    videos.shuffle()
+    shuffle(videos)
 
     timer = 0 
     description = ""
@@ -65,7 +66,7 @@ def makeCompilation(inputpath = TIKTOKPATH,                                     
     intro = f"{INTROPATH}/Intro.mp4"
     if  os.path.isfile(intro):
         introVid = VideoFileClip(intro)
-        videos.prepend(introVid)
+        videos.insert(0, introVid)
 
     # Add outro vid
     outro = f"{OUTROPATH}/Outro.mp4"
@@ -95,5 +96,7 @@ def makeCompilation(inputpath = TIKTOKPATH,                                     
     logging.info("Total Length: " + str(totalDuration))
     
 if __name__ == "__main__":
+    print(" Making Compilation...")
     makeCompilation()
+    print(" Compilation Complete")
 

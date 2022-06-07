@@ -1,6 +1,6 @@
 
 TIKTOKCOOKIE = "verify_9cd3ed1f0c495e641d3eafbe4384085f"    # Grab the s_v_web_id cookie from browser and paste here
-HASHTAG = "[Fuzzy Hats]"                                    # Hashtag for your channel 
+HASHTAG = "funny"                                    # Hashtag for your channel 
 
 # Youtube information
 ACCOUNTNAME = "Masterdiasastermail@gmail.com"
@@ -29,13 +29,14 @@ MONTH = {
 # Paths
 timecodeFolder =f"{HASHTAG}-{MONTH}_{NOW.day}_{NOW.year}"
 OUTPUTPATH =    f"./assets/videos/Created/{timecodeFolder}"
-TIKTOKPATH =    f"./assets/videos/TikTok/{timecodeFolder}"
+TIKTOKPATH =    f"./assets/videos/TikToks/{timecodeFolder}"
 INTROPATH =     f"./assets/videos/Intro"
 OUTROPATH =     f"./assets/videos/Outro"
 THUMBNAILPATH = f"./assets/thumbnails/{timecodeFolder}"
 BACKGROUNDPATH =f"./assets/thumbnails"
+MODELPATH =     f"./assets/models/resnet.pth"
 PATHS = {
-    OUTPUTPATH, TIKTOKPATH, INTROPATH, OUTROPATH, THUMBNAILPATH
+    OUTPUTPATH, TIKTOKPATH, INTROPATH, OUTROPATH, THUMBNAILPATH, BACKGROUNDPATH, MODELPATH
 }
 
 

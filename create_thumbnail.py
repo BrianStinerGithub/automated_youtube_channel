@@ -5,6 +5,7 @@ import torchvision.transforms as transforms
 from PIL import Image
 import os
 import random as r
+from config import MODELPATH
 
 
 class ThumbnailMaker:
@@ -27,7 +28,7 @@ class ThumbnailMaker:
         model = torchvision.models.resnet50()
         model.avgpool = torch.nn.AdaptiveAvgPool2d(1)
         model.fc = torch.nn.Linear(in_features=2048, out_features=1)
-        model.load_state_dict(torch.load('model/model-resnet50.pth', map_location=torch.device('cpu'))) 
+        model.load_state_dict(torch.load(MODELPATH, map_location=torch.device('cpu'))) 
         return model.eval()
 
     def predict(self, image):

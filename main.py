@@ -36,11 +36,10 @@ def attemptRoutine():
             logging.error(f"Routine Failed on {hour}:{minute}:{second} OS error: {0}".format(err))
             time.sleep(60)
 
-# TODO If I use python 3.10, I can use a match case for user input on how often to run the TikTok routine
 
 DAILY_SCHEDULED_TIME = "20:00"
 schedule.every().day.at(DAILY_SCHEDULED_TIME).do(attemptRoutine)
-attemptRoutine()    # Make one video right now
+routine()           # Make one video right now
 while True:         # and daily at the chosen time
     schedule.run_pending()  
     time.sleep(60)

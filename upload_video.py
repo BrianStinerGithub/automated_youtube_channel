@@ -2,6 +2,7 @@ from simple_youtube_api.Channel import Channel
 from simple_youtube_api.LocalVideo import LocalVideo
 from simple_youtube_api.YouTube import YouTube
 from config import *
+import logging
 
 client_secrets_file = "./assets/secrets.json"
 scopes = ["https://www.googleapis.com/auth/youtube.upload"]
@@ -41,19 +42,15 @@ def upload_video(
     video.set_made_for_kids(False)
 
     # setting thumbnail
-    video.set_thumbnail_path("./assets/Template.png")            #(THUMBNAILPATH.replace(" ",""))
+    video.set_thumbnail_path("./assets/Template.png")            
 
-    # uploading video and printing the results
+    # Upload video
     video = channel.upload_video(video)
-    print(video.id)
-    print(video)
+    logging.info(f"Video uploaded: {video.title} - {video.id} [{MONTH}/{NOW.day}/{NOW.year}]")
 
-    # liking video
+    # Like video
     video.like()
-    
-    # commenting on video
+
 
 if __name__ == "__main__":
-    print("Uploading video...")
     upload_video()
-    print("Video was uploaded!")
